@@ -20,12 +20,12 @@ A subsequence of the final video. The final video is the composition of many SUB
 * VIDEO ids
 
 ### VIDEO
-The videos included into the final one. Each VIDEO is composed of: 
+The videos included into the final one. We can specify multiple paths for a VIDEO element. This means that the VIDEO is the composition of multiple videos. Each VIDEO is composed of: 
 
 * A unique id 
 * A name
-* path to video 
-* FILTER ids
+* path list to videos `["video_1.mp4","video_2.mp4"]`
+* FILTER id list for every video `[[filters for video_0.mp4], [filters for video_1.mp4]]`
 
 ### FILTER
 Transformations applied to the video. Each FILTER is composed of: 
