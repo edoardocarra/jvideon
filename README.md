@@ -18,3 +18,24 @@ A subsequence of the final video. The final video is the composition of many SUB
 * BKG id 
 * duration (hh:mm:ss)
 * VIDEO ids
+
+### VIDEO
+The videos included into the final one. Each VIDEO is composed of: 
+
+* A unique id 
+* A name
+* path to video 
+* FILTER ids
+
+### FILTER
+Transformations applied to the video. Each FILTER is composed of: 
+
+* A unique id 
+* A name
+* Operation id 
+* Operations parameters
+
+---
+
+#### TODO: 
+* audio
