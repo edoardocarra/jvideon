@@ -17,15 +17,18 @@ A subsequence of the final video. The final video is the composition of many SUB
 * A name
 * BKG id 
 * duration (hh:mm:ss)
-* VIDEO ids
+* COMPOSITION id
+
+### COMPOSITION
+A single COMPOSITION defines the layout for a single video, or the layout for a compositions of multiple videos. This enhances side-by-side, crossfading, being independent from the BKG of the SUBSEQ. Given two sequential SUBSEQ using the same COMPOSITION but different BKG we can do operations like changing writes playing the same video.   
 
 ### VIDEO
-The videos included into the final one. We can specify multiple paths for a VIDEO element. This means that the VIDEO is the composition of multiple videos. Each VIDEO is composed of: 
+A single video included into the final one. Each VIDEO is composed of: 
 
 * A unique id 
 * A name
-* path list to videos `["video_0.mp4","video_1.mp4"]`
-* FILTER id list for every video `[[filters for video_0.mp4], [filters for video_1.mp4]]`
+* path to video
+* FILTER list for video
 
 ### FILTER
 Transformations applied to the video. Each FILTER is composed of: 
