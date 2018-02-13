@@ -20,7 +20,7 @@ A subsequence of the final video. The final video is the composition of many SUB
 * COMPOSITION id
 
 ### COMPOSITION
-A single COMPOSITION defines the layout for a single video, or the layout for a compositions of multiple videos. This enhances side-by-side, crossfading, being independent from the BKG of the SUBSEQ. Given two sequential SUBSEQ using the same COMPOSITION but different BKG we can do operations like changing writes playing the same video.   
+A single COMPOSITION defines the layout for a single VIDEO, or the layout for a compositions of multiple videos. This enhances side-by-side, crossfading, being independent from the BKG of the SUBSEQ. Given two sequential SUBSEQ using the same COMPOSITION but different BKG we can do operations like changing only writes or images in background. 
 
 ### VIDEO
 A single video included into the final one. Each VIDEO is composed of: 
