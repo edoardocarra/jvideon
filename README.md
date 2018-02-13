@@ -16,7 +16,7 @@ A subsequence of the final video. The final video is the composition of many SUB
 * A unique id 
 * A name
 * BKG id 
-* duration (hh:mm:ss)
+* duration
 * COMPOSITION id
 
 ### COMPOSITION
