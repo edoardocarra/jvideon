@@ -24,7 +24,7 @@ The videos included into the final one. We can specify multiple paths for a VIDE
 
 * A unique id 
 * A name
-* path list to videos `["video_1.mp4","video_2.mp4"]`
+* path list to videos `["video_0.mp4","video_1.mp4"]`
 * FILTER id list for every video `[[filters for video_0.mp4], [filters for video_1.mp4]]`
 
 ### FILTER
