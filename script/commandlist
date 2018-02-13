@@ -1,0 +1,80 @@
+#png to video 
+ffmpeg -loop 1 -i <input_path> -c:v libx264 -preset ultrafast -t <duration> -pix_fmt yuv420p <output_path>
+
+#trim video 
+ffmpeg -i <input_path> -ss <begin hh:mm:ss> -t <duration hh:mm:ss> -async 1 <output_path>
+
+#speedup video
+ffmpeg -i <input_path>  -an -filter:v "setpts=<1/n - es. 10x => 1/10>*PTS" <output_path>
+
+#crop video
+ffmpeg -i <input_path> -filter:v "crop=<width>:<height>:<start_crop_x>:<start_crop_y>" <output_path>
+
+#side by side 
+ffmpeg -i <input_path_left> -i <input_path_right> -filter_complex hstack <output_path>
+
+#scale
+ffmpeg -i <input_path> -vf scale=<result_width _ -1 = proportional to height scale>:<result_height _ -1 = proportional to width scale> <output_path>
+
+#overlay video to image
+ffmpeg -i <input_path_image> -i <input_path_video> -filter_complex "[0:v][1:v] overlay=<video_position_x>:<video_position_y>" -pix_fmt yuv420p -c:a copy <output_path>
+
+#mount up video from multiple video sequences + fading between videos
+
+ffmpeg -y -i slides/supplemental_slide2.mp4 \
+-i video_results/intermediates/house_AB_fin.mp4  \
+-i video_results/intermediates/ivy_AB_fin.mp4 \
+-i video_results/intermediates/lion_AB_fin.mp4 \
+-i video_results/intermediates/sea_AB_fin.mp4 \
+-f lavfi -i color=white:s=1920x1080 -filter_complex \
+"[0:v]format=pix_fmts=yuva420p,fade=t=out:st=10:d=1:alpha=1,setpts=PTS-STARTPTS[v0]; \
+[1:v]format=pix_fmts=yuva420p,fade=t=in:st=0:d=1:alpha=1,fade=t=out:st=22.5:d=1:alpha=1,setpts=PTS-STARTPTS+2.5/TB[v1]; \
+[2:v]format=pix_fmts=yuva420p,fade=t=in:st=0:d=1:alpha=1,fade=t=out:st=42.5:d=1:alpha=1,setpts=PTS-STARTPTS+22.5/TB[v2]; \
+[3:v]format=pix_fmts=yuva420p,fade=t=in:st=0:d=1:alpha=1,fade=t=out:st=62.5:d=1:alpha=1,setpts=PTS-STARTPTS+42.5/TB[v3]; \
+[4:v]format=pix_fmts=yuva420p,fade=t=in:st=0:d=1:alpha=1,fade=t=out:st=82.5:d=1:alpha=1,setpts=PTS-STARTPTS+62.5/TB[v4]; \
+[5:v]trim=duration=40[over]; \
+[over][v0]overlay[over1]; \
+[over1][v1]overlay[over2]; \
+[over2][v2]overlay[over3]; \
+[over3][v3]overlay[over4]; \
+[over4][v4]overlay=format=yuv420[outv]" \
+-vcodec libx264 -map [outv] video_results/results.mp4
+
+
+
+ffmpeg -y -i <path_video_seq_0> \
+-i <path_video_seq_1>  \
+-i <path_video_seq_2>  \
+-i <path_video_seq_3>  \
+-i <path_video_seq_4>  \
+-f lavfi -i color=white:s=<width>x<height> -filter_complex \
+"[0:v]format=pix_fmts=yuva420p,fade=t=out:st=10:d=1:alpha=1,setpts=PTS-STARTPTS[v0]; \
+[1:v]format=pix_fmts=yuva420p,fade=t=in:st=0:d=1:alpha=1,fade=t=out:st=22.5:d=1:alpha=1,setpts=PTS-STARTPTS+2.5/TB[v1]; \
+[2:v]format=pix_fmts=yuva420p,fade=t=in:st=0:d=1:alpha=1,fade=t=out:st=42.5:d=1:alpha=1,setpts=PTS-STARTPTS+22.5/TB[v2]; \
+[3:v]format=pix_fmts=yuva420p,fade=t=in:st=0:d=1:alpha=1,fade=t=out:st=62.5:d=1:alpha=1,setpts=PTS-STARTPTS+42.5/TB[v3]; \
+[4:v]format=pix_fmts=yuva420p,fade=t=in:st=0:d=1:alpha=1,fade=t=out:st=82.5:d=1:alpha=1,setpts=PTS-STARTPTS+62.5/TB[v4]; \
+[5:v]trim=duration=40[over]; \
+[over][v0]overlay[over1]; \
+[over1][v1]overlay[over2]; \
+[over2][v2]overlay[over3]; \
+[over3][v3]overlay[over4]; \
+[over4][v4]overlay=format=yuv420[outv]" \
+-vcodec libx264 -map [outv] video_results/results.mp4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
