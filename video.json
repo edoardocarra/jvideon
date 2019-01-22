@@ -1,0 +1,18 @@
+{
+	"sbsweighted.mp4": {
+		"background": "empty.png",
+		"videos": 
+		[
+			{
+			"input": "base_LA.mp4",
+			"trim": "845.2:-1",
+			"position": "72.7:218.5"
+			},
+			{
+			"input": "composed.mp4",
+			"scale": "845.2:-1",
+			"position": "1002.1:218.5"
+			}
+		]
+	}
+}
