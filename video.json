@@ -1,18 +1,70 @@
 {
-	"sbsweighted.mp4": {
-		"background": "empty.png",
-		"videos": 
-		[
-			{
-			"input": "base_LA.mp4",
-			"trim": "845.2:-1",
-			"position": "72.7:218.5"
-			},
-			{
-			"input": "composed.mp4",
-			"scale": "845.2:-1",
-			"position": "1002.1:218.5"
-			}
-		]
-	}
+	"final_sequence": [0],
+	"videos": [
+		{
+			"output": "test/destra1esinistra1_over_bkg.mp4", 
+			"backbround": "test/b1.png",
+			"input": ["test/sinistra1_over_bkg.mp4",
+					  "test/destra1_over_bkg.mp4"],
+			"transformations": [
+			[
+				{
+					"operation": "POSITION",
+					"parameters": "1002.1:218.5"
+				}
+			],
+			[
+				{
+					"operation": "POSITION",
+					"parameters": "1002.1:218.5"
+				}
+			]]
+		},
+		{
+			"name": "test/sinistra1_over_bkg.mp4",
+			"backbround": "test/sinistra1_bkg.png",
+			"videos": ["test/sinistra1.mp4"],
+			"transformations": [
+				{
+					"operation": "POSITION",
+					"parameters": "1002.1:218.5"
+				},
+				{
+					"operation": "CROP",
+					"parameters": "1920:1080"
+				},
+				{
+					"operation": "SCALE",
+					"parameters": "845.2:-1"
+				},
+				{
+					"operation": "SPEEDUP",
+					"parameters": "0.1*PTS"
+				}
+			]
+		},
+		{
+			"name": "test/destra1_over_bkg.mp4",
+			"backbround": "test/destra1_bkg.png",
+			"videos": ["test/destra1.mp4"],
+			"transformations": [
+				{
+					"operation": "POSITION",
+					"parameters": "1002.1:218.5"
+				},
+				{
+					"operation": "CROP",
+					"parameters": "1920:1080"
+				},
+				{
+					"operation": "SCALE",
+					"parameters": "845.2:-1"
+				},
+				{
+					"operation": "SPEEDUP",
+					"parameters": "0.1*PTS"
+				}
+			]
+		}
+	]
 }
