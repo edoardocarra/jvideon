@@ -7,92 +7,45 @@ import numpy as np
 import scipy.misc
 
 json_file="video.json"
+work_directory="jvideon"
 
-def out_path(file):
-	return os.path.join(output_dir,file)
-def in_path(file):
-	return os.path.join(asset_folder,file)
+def valid(video_json):
+	is_valid=True
+	is_valid = is_valid and video_json["name"] != ""
+	is_valid = is_valid and os.path.isfile(video_json["background"])
+	is_valid = is_valid and len(video_json["input"]) == len(video_json["transformations"])
+	for path in video_json["input"]:
+		is_valid = is_valid and os.path.isfile(path)
+	for transform in video_json["transformations"]:
+		is_valid = is_valid and (transform in operation2func)
 
-def empty():
-	image_array = np.zeros([1080,1920,3],dtype=np.uint8)
-	image_array[:] = 255
-	scipy.misc.imsave(out_path("empty.png"), image_array)
+	return is_valid
 
-def temp_name(output_name):
-	path, filename = os.path.split(output_name)
-	filename = os.path.splitext(filename)[0]
-	newfilename = 'temp_%s.mp4' % filename
-	return os.path.join(path, newfilename)
+def build(video_json):
+	if not valid(video_json):
+		print("ERROR: Invalid video properties")
+		exit()
 
-def speedup(output_name, value) :
-	input_name=temp_name(output_name)
-	os.system("cp "+output_name+" "+input_name)
-	os.system("ffmpeg -y -i "+input_name+" -an -filter:v \"setpts=1/"+str(value)+"*PTS\" "+output_name)
-	os.system("rm "+input_name)
+	name=video_json["name"]
+	background=video_json["background"]
+	input_videos=video_json["input"]
+	transformations=video_json["transformations"]
 
-def crop(output_name, value) :
-	input_name=temp_name(output_name)
-	os.system("cp "+output_name+" "+input_name)
-	os.system("ffmpeg -i "+input_name+" -filter:v \"crop="+str(value)+"\" "+output_name)
-	os.system("rm "+input_name)
-
-def scale(output_name, value) :
-	input_name=temp_name(output_name)
-	os.system("cp "+output_name+" "+input_name)
-	os.system("ffmpeg -y -i "+input_name+" -vf scale="+str(value)+" "+output_name)
-	os.system("rm "+input_name)
-
-def overlay(background_video, overlay, background_image="") :
-	if background_image!="":
-		background = background_image
-	else:
-		background=temp_name(background_video)
-		os.system("cp "+background_video+" "+background)
-
-	os.system("ffmpeg -y -i "+ background +" -i "+ out_path(overlay["input"]) +" -filter_complex \"[0:v][1:v] overlay="+ overlay["position"] +"\" -pix_fmt yuv420p -c:a copy "+background_video)
-
-field_2_func = {
-    "speedup": speedup,
-    "scale": scale,
-    "crop": crop
-}
-
-def build(video):
-	input_name=in_path(video['input'])
-	os.system("cp "+input_name+" "+output_dir)
-	output_name=out_path(video['input'])
-	for key,value in video.items():
-		if key in field_2_func:
-			field_2_func[key](output_name, value)
-
-def combine(output, parameters):
-	if parameters["background"]=="empty.png":
-		empty()
-	itervids = iter(parameters["videos"])
-	overlay(output, next(itervids), out_path(parameters["background"]))
-	for video in itervids:
-		overlay(output, video)
+	#building logic
 
 if not os.path.isfile(json_file): 
 	print("ERROR: "+json_file+" does not exists")
 	exit()
 
-os.system("mkdir "+output_dir)
-
 with open(json_file) as f:
     data = json.load(f)
 
-for key,value in data.items():
-	for video in value["videos"]:
-		build(video) 
-	combine(out_path(key), value)
-
-#  504  ffmpeg -y -i B0.ffconcat -vf fps=25 B0.mp4
-#  511  ffmpeg -y -i A0.mp4 -an -filter:v "setpts=1/10*PTS" A0su.mp4
-#  519  ffmpeg -y -i A0su.mp4 -vf scale=592:-1 A0su_sc.mp4
-#  527  ffmpeg -y -i ../../empty.png -i A0su_sc.mp4 -filter_complex "[0:v][1:v] overlay=42.4:33.4 px" -pix_fmt yuv420p -c:a copy freepaint1.mp4
-
-
+if "videos" in data:
+	for video in data["videos"]:
+		build(video)
+else: 
+	print("ERROR: any video present")
+	exit()
 
 
 
