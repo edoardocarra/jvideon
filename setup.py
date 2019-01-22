@@ -1,0 +1,13 @@
+#!/usr/bin/python
+
+import pip
+
+def import_or_install(package):
+    try:
+        __import__(package)
+    except ImportError:
+        pip.main(['install', package])   
+
+import_or_install('json')
+import_or_install('numpy')
+import_or_install('scipy')
