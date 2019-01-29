@@ -3,7 +3,7 @@
 	"videos": [
 		{
 			"name": "test/destra1esinistra1_over_bkg.mp4", 
-			"background": "test/destra1esinistra1_bkg.png",
+			"background": "test/empty.png",
 			"input": ["test/sinistra1_over_bkg.mp4",
 					  "test/destra1_over_bkg.mp4"],
 			"transformations": [
@@ -22,7 +22,7 @@
 		},
 		{
 			"name": "test/sinistra1_over_bkg.mp4",
-			"background": "test/sinistra1_bkg.png",
+			"background": "test/empty.png",
 			"input": ["test/sinistra1.mp4"],
 			"transformations": [[
 				{
@@ -45,7 +45,7 @@
 		},
 		{
 			"name": "test/destra1_over_bkg.mp4",
-			"background": "test/destra1_bkg.png",
+			"background": "test/empty.png",
 			"input": ["test/destra1.mp4"],
 			"transformations": [[
 				{
