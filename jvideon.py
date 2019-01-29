@@ -1,40 +1,20 @@
 #!/usr/bin/python
 
 import sys
+sys.path.append('modules')
+import os
 import json
-import os.path
-import numpy as np
-import scipy.misc
+import operations
 
 json_file="video.json"
 work_directory="jvideon"
 
-def speedup(output_name, value) :
-	input_name=temp_name(output_name)
-	os.system("cp "+output_name+" "+input_name)
-	os.system("ffmpeg -y -i "+input_name+" -an -filter:v \"setpts=1/"+str(value)+"*PTS\" "+output_name)
-	os.system("rm "+input_name)
-
-def crop(output_name, value) :
-	input_name=temp_name(output_name)
-	os.system("cp "+output_name+" "+input_name)
-	os.system("ffmpeg -i "+input_name+" -filter:v \"crop="+str(value)+"\" "+output_name)
-	os.system("rm "+input_name)
-
-def scale(output_name, value) :
-	input_name=temp_name(output_name)
-	os.system("cp "+output_name+" "+input_name)
-	os.system("ffmpeg -y -i "+input_name+" -vf scale="+str(value)+" "+output_name)
-	os.system("rm "+input_name)
- 
-def position():
-	print("fill code here")
-
 operation2func = {
-    "SPEEDUP": speedup,
-    "CROP": scale,
-    "SCALE": crop,
-    "POSITION": position
+    "SPEEDUP": operations.speedup,
+    "CROP": operations.scale,
+    "SCALE": operations.crop,
+    "POSITION": operations.position,
+    "TRIM": operations.trim
 }
 
 def valid(videos_json):
