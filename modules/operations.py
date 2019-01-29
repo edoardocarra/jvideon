@@ -1,8 +1,7 @@
 import numpy as np
 import scipy.misc
+import os
 
-def speedup():
-	print("fill code speedup")
 def scale():
 	print("fill code scale")
 def crop():
@@ -11,6 +10,13 @@ def position():
 	print("fill code position")
 def trim():
 	print("fill code trim")
+
+def speedup(input_name, parameters, background, output_name) :
+	os.system("ffmpeg -y -i "+input_name+" -an -filter:v \"setpts="+parameters+"\" "+output_name)
+
+def position(input_name, parameters, background, output_name) :
+ 	os.system("ffmpeg -y -i "+ background +" -i "+ input_name +" -filter_complex \"[0:v][1:v] overlay="+ parameters +"\" -pix_fmt yuv420p -c:a copy "+output_name)
+
 
 # def out_path(file):
 # 	return os.path.join(output_dir,file)
@@ -27,12 +33,6 @@ def trim():
 # 	filename = os.path.splitext(filename)[0]
 # 	newfilename = 'temp_%s.mp4' % filename
 # 	return os.path.join(path, newfilename)
-
-# def speedup(output_name, value) :
-# 	input_name=temp_name(output_name)
-# 	os.system("cp "+output_name+" "+input_name)
-# 	os.system("ffmpeg -y -i "+input_name+" -an -filter:v \"setpts=1/"+str(value)+"*PTS\" "+output_name)
-# 	os.system("rm "+input_name)
 
 # def crop(output_name, value) :
 # 	input_name=temp_name(output_name)

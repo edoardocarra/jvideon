@@ -45,20 +45,18 @@ def valid(videos_json):
 def apply_transformations(path, transformations, background):
 
 	(dirname, filename) = os.path.split(path)
-	input_video = filename
+	input_video_name = filename #on start this is video on disk
 	for transformation in transformations:
-		operation = transformation["operation"]
-		parameters = transformation["parameters"]
+		input_video_path=os.path.join(dirname,input_video_name)
+		output_video_name = transformation["operation"]+"_"+filename
+		output_video_path=os.path.join(dirname,output_video_name)
+		operation2func[transformation["operation"]](input_video_path, transformation["parameters"], background, output_video_path)
+		input_video_name=output_video_name
 
-		print("prendo "+ input_video)
-		print("applico "+ operation)
-		print("salvo "+ operation+"_"+filename)
-		input_video=operation+"_"+filename
-
-	return background
+	return os.path.join(dirname,input_video_name)
 
 def build(video_json):
-	name=video_json["name"]
+	output_name=video_json["name"]
 	background=video_json["background"]
 	input_videos=video_json["input"]
 	transformations=video_json["transformations"]
@@ -66,13 +64,9 @@ def build(video_json):
 	for i in range(0,len(input_videos)):
 		video_path = input_videos[i]
 		video_transformations = transformations[i] 
-		background = apply_transformations(video_path,video_transformations,background)
-	
-	#for each input video and for each respective transformation, generate an intermediate video
-	#intermediate video is saved in a temporary folder, and the name terminates with the name of the transformation applied on it 
-	#if there are more that one video, they will compose into the first one once all transformations on them are finished
-
-	#building logic
+		output_video = apply_transformations(video_path,video_transformations,background)
+		os.system("mv "+output_video+" "+output_name)
+		background=output_name
 
 if not os.path.isfile(json_file): 
 	print("ERROR: "+json_file+" does not exists")
