@@ -11,7 +11,26 @@ import threading
 json_file="video.json"
 work_directory="jvideon"
 
+operation2func = {
+    "SPEEDUP": operations.speedup,
+    "CROP": operations.crop,
+    "SCALE": operations.scale,
+    "POSITION": operations.position,
+    "TRIM": operations.trim,
+    "CROSSFADING": operations.crossfade
+}
+
+#====================================
+#====PROGRESS BAR AND UTILITIES======
+#====================================
+
 completed=0
+to_clear=[]
+
+def clear():
+	for path in to_clear:
+		if os.path.isfile(path):
+			os.system("rm "+path)
 
 def pb(total_videos):
 	toolbar_width = 50
@@ -33,13 +52,9 @@ def pb(total_videos):
 		
 	sys.stdout.write("\n")
 
-operation2func = {
-    "SPEEDUP": operations.speedup,
-    "CROP": operations.crop,
-    "SCALE": operations.scale,
-    "POSITION": operations.position,
-    "TRIM": operations.trim
-}
+#====================================
+#=======PROPERTIES VALIDATOR=========
+#====================================
 
 def valid(videos_json):
 	is_valid=True
@@ -62,14 +77,20 @@ def valid(videos_json):
 	else:
 		return -1
 
+#====================================
+#======SEQUENCE ELEMENTS BUILDER=====
+#====================================
+
 def apply_transformations(path, transformations, background):
 	global completed
+	global to_clear
 	(dirname, filename) = os.path.split(path)
 	input_video_name = filename #on start this is video on disk
 	for transformation in transformations:
 		input_video_path=os.path.join(dirname,input_video_name)
 		output_video_name = transformation["operation"]+"_"+filename
 		output_video_path=os.path.join(dirname,output_video_name)
+		to_clear.append(output_video_path)
 		operation2func[transformation["operation"]](input_video_path, transformation["parameters"], background, output_video_path)
 		input_video_name=output_video_name
 		completed=completed+1
@@ -89,6 +110,22 @@ def build(video_json):
 		os.system("mv "+output_video+" "+output_name)
 		background=output_name
 
+#====================================
+#==========SEQUENCE BUILDER==========
+#====================================
+
+def build_sequence(videos, sequence_properties):
+	output_path = sequence_properties["name"]
+	sequence_videos = [data["videos"][index]["name"] for index in sequence_properties["videos"]]
+	operation2func[sequence_properties["transition_effect"]](sequence_videos,output_path)
+
+
+
+#====================================
+#=============MAIN CALL==============
+#====================================
+
+
 if not os.path.isfile(json_file): 
 	print("ERROR: "+json_file+" does not exists")
 	exit()
@@ -97,8 +134,9 @@ with open(json_file) as f:
     data = json.load(f)
 
 if "videos" in data:
-	n_videos = valid(data["videos"])
 
+	#validate input
+	n_videos = valid(data["videos"])
 	if n_videos == -1:
 		print("ERROR: Invalid video properties")
 		exit()
@@ -107,14 +145,17 @@ if "videos" in data:
 	t = threading.Thread(target=pb, args=(n_videos,))
 	t.start()
 
+	#build single videos
 	for video in data["videos"]:
 		build(video)
 
+	#build video sequence 
+	if "sequence" in data:
+		build_sequence(data["videos"],data["sequence"])
+
+	clear()
 	t.join()
+
 else: 
 	print("ERROR: any video present")
 	exit()
-
-
-
-

@@ -23,3 +23,7 @@ def scale(input_name, parameters, background, output_name) :
 
 def crop(input_name, parameters, background, output_name) :
 	process("ffmpeg -y -i "+input_name+" -filter:v \"crop="+parameters+"\" "+output_name)
+
+def crossfade(input_videos,output_name) :
+	print(input_videos)
+	print(output_name)

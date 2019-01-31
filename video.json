@@ -1,5 +1,9 @@
 {
-	"final_sequence": [0],
+	"sequence": {
+		"name": "test/output.mp4",
+		"videos": [2,2],
+		"transition_effect": "CROSSFADING"
+	},
 	"videos": [
 		{
 			"name": "test/destra1_speedup.mp4",
