@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3.6
+#!/usr/local/bin/python
 
 import sys
 sys.path.append('modules')
@@ -6,8 +6,6 @@ import os
 import json
 import operations
 import ntpath
-import time
-import progressbar
 import threading
 
 json_file="video.json"
