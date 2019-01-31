@@ -12,8 +12,8 @@ work_directory="jvideon"
 
 operation2func = {
     "SPEEDUP": operations.speedup,
-    "CROP": operations.scale,
-    "SCALE": operations.crop,
+    "CROP": operations.crop,
+    "SCALE": operations.scale,
     "POSITION": operations.position,
     "TRIM": operations.trim
 }
@@ -24,15 +24,7 @@ def valid(videos_json):
 
 	for video_json in videos_json:
 		is_valid = is_valid and video_json["name"] != ""
-
-		if not is_valid:
-			print(video_json["name"])
-
-		is_valid = is_valid and os.path.isfile(video_json["background"])
-		
-		if not is_valid:
-			print(video_json["background"])
-
+		is_valid = is_valid and (video_json["background"] == "" or os.path.isfile(video_json["background"]))
 		is_valid = is_valid and len(video_json["input"]) == len(video_json["transformations"])
 		for input_path in video_json["input"]:
 			is_valid = is_valid and (os.path.isfile(input_path) or input_path in output_videos)  
