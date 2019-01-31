@@ -1,5 +1,3 @@
-import numpy as np
-import scipy.misc
 import os
 
 silence_console=True
