@@ -119,12 +119,9 @@ def build_sequence(videos, sequence_properties):
 	sequence_videos = [data["videos"][index]["name"] for index in sequence_properties["videos"]]
 	operation2func[sequence_properties["transition_effect"]](sequence_videos,output_path)
 
-
-
 #====================================
 #=============MAIN CALL==============
 #====================================
-
 
 if not os.path.isfile(json_file): 
 	print("ERROR: "+json_file+" does not exists")
@@ -142,19 +139,19 @@ if "videos" in data:
 		exit()
 
 	#progress bar
-	t = threading.Thread(target=pb, args=(n_videos,))
-	t.start()
+	# t = threading.Thread(target=pb, args=(n_videos,))
+	# t.start()
 
-	#build single videos
-	for video in data["videos"]:
-		build(video)
+	# #build single videos
+	# for video in data["videos"]:
+	# 	build(video)
 
 	#build video sequence 
 	if "sequence" in data:
 		build_sequence(data["videos"],data["sequence"])
 
-	clear()
-	t.join()
+	# clear()
+	# t.join()
 
 else: 
 	print("ERROR: any video present")
