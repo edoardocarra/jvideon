@@ -7,6 +7,7 @@ import json
 import operations
 import ntpath
 import threading
+import time
 
 json_file="video.json"
 work_directory="jvideon"
@@ -27,13 +28,30 @@ operation2func = {
 completed=0
 to_clear=[]
 
+built=False
+
 def clear():
 	for path in to_clear:
 		if os.path.isfile(path):
 			os.system("rm "+path)
 
+
+def spinning_cursor():
+    while True:
+        for cursor in '|/-\\':
+            yield cursor
+
+def sp():
+	spinner = spinning_cursor()
+	while not built:
+	    sys.stdout.write(next(spinner))
+	    sys.stdout.flush()
+	    time.sleep(0.1)
+	    sys.stdout.write('\b')
+
 def pb(total_videos):
 	toolbar_width = 50
+	toolbar_filled = 0
 	segment=int(toolbar_width/total_videos)
 	global completed
 
@@ -48,8 +66,14 @@ def pb(total_videos):
 			for i in range(segment):
 				sys.stdout.write("-")
 				sys.stdout.flush()
+				toolbar_filled+=1
 			showed=completed
-		
+	
+	if toolbar_filled < toolbar_width:
+		for i in range(segment):
+			sys.stdout.write("-")
+			sys.stdout.flush()		
+
 	sys.stdout.write("\n")
 
 #====================================
@@ -139,19 +163,25 @@ if "videos" in data:
 		exit()
 
 	#progress bar
-	# t = threading.Thread(target=pb, args=(n_videos,))
-	# t.start()
+	t = threading.Thread(target=pb, args=(n_videos,))
+	print("BUILDING VIDEOS")
+	t.start()
 
 	# #build single videos
-	# for video in data["videos"]:
-	# 	build(video)
+	for video in data["videos"]:
+		build(video)
 
+	clear()
+	t.join()
+
+	w = threading.Thread(target=sp)
+	print("BUILDING SEQUENCE")
+	w.start()
 	#build video sequence 
 	if "sequence" in data:
 		build_sequence(data["videos"],data["sequence"])
-
-	# clear()
-	# t.join()
+	built=True
+	w.join()
 
 else: 
 	print("ERROR: any video present")
