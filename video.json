@@ -1,7 +1,7 @@
 {
 	"sequence": {
 		"name": "test/output.mp4",
-		"videos": [0,3,3],
+		"videos": [0,3,3,0,3],
 		"transition_effect": "CROSSFADING"
 	},
 	"videos": [
@@ -23,7 +23,7 @@
 			"transformations": [[
 				{
 					"operation": "SCALE",
-					"parameters": "640:-1"					
+					"parameters": "960:-1"					
 				}]
 			]
 		},
@@ -34,7 +34,7 @@
 			"transformations": [[
 				{
 					"operation": "SCALE",
-					"parameters": "640:-1"					
+					"parameters": "960:-1"					
 				}]
 			]
 		},
@@ -53,7 +53,7 @@
 			[
 				{
 					"operation": "POSITION",
-					"parameters": "800:218.5"
+					"parameters": "960:218.5"
 				}
 			]]
 		}
