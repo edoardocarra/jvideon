@@ -41,7 +41,7 @@ def crop(input_name, parameters, background, output_name) :
 
 def crossfade(input_videos,output_name) :
 
-	fade_time = 1
+	fade_time = 0
 	command = "ffmpeg -y "
 	for video in input_videos:
 		command += "-i "+video+" "
@@ -49,7 +49,7 @@ def crossfade(input_videos,output_name) :
 
 	command += "\""
 
-	time_pts=0
+	time_pts=0-fade_time
 	for i in range(0,len(input_videos)):
 		vformat="format=pix_fmts=yuva420p,"
 
@@ -80,25 +80,3 @@ def crossfade(input_videos,output_name) :
 	command+="[over"+str(len(input_videos)-1)+"][v"+str(len(input_videos)-1)+"]overlay=format=yuv420[outv]\" -vcodec libx264 -map [outv] "+output_name
 
 	process(command)
-
-#ffmpeg -y -i slides/us.mp4 \
-#-i video_userstudy/photo3_40s_label_su.mp4 \
-#-i video_userstudy/drawing2_40s_label_su.mp4 \
-#-i video_userstudy/photo4_40s_label_su.mp4 \
-#-i video_userstudy/drawing3_40s_label_su.mp4 \
-#-i video_userstudy/drawing5_label.mp4 \
-#-f lavfi -i color=white:s=1920x1080 -filter_complex \
-#"[0:v]format=pix_fmts=yuva420p,fade=t=out:st=10:d=1:alpha=1,setpts=PTS-STARTPTS[v0]; \
-#[1:v]format=pix_fmts=yuva420p,fade=t=in:st=0:d=1:alpha=1,fade=t=out:st=22.5:d=1:alpha=1,setpts=PTS-STARTPTS+2.5/TB[v1]; \
-#[2:v]format=pix_fmts=yuva420p,fade=t=in:st=0:d=1:alpha=1,fade=t=out:st=42.5:d=1:alpha=1,setpts=PTS-STARTPTS+22.5/TB[v2]; \
-#[3:v]format=pix_fmts=yuva420p,fade=t=in:st=0:d=1:alpha=1,fade=t=out:st=62.5:d=1:alpha=1,setpts=PTS-STARTPTS+42.5/TB[v3]; \
-#[4:v]format=pix_fmts=yuva420p,fade=t=in:st=0:d=1:alpha=1,fade=t=out:st=82.5:d=1:alpha=1,setpts=PTS-STARTPTS+62.5/TB[v4]; \
-#[5:v]format=pix_fmts=yuva420p,fade=t=in:st=0:d=1:alpha=1,fade=t=out:st=102.5:d=1:alpha=1,setpts=PTS-STARTPTS+82.5/TB[v5]; \
-#[5:v]trim=duration=40[over]; \
-#[over][v0]overlay[over1]; \
-#[over1][v1]overlay[over2]; \
-#[over2][v2]overlay[over3]; \
-#[over3][v3]overlay[over4]; \
-#[over4][v4]overlay[over5]; \
-#[over5][v5]overlay=format=yuv420[outv]" \
-#-vcodec libx264 -map [outv] video_userstudy/us_sequences_40s.mp4
