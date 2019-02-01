@@ -41,7 +41,7 @@ def crop(input_name, parameters, background, output_name) :
 
 def crossfade(input_videos,output_name) :
 
-	fade_time = 0
+	fade_time = 0.5
 	command = "ffmpeg -y "
 	for video in input_videos:
 		command += "-i "+video+" "
@@ -49,16 +49,16 @@ def crossfade(input_videos,output_name) :
 
 	command += "\""
 
-	time_pts=0-fade_time
+	time_pts=-fade_time
 	for i in range(0,len(input_videos)):
 		vformat="format=pix_fmts=yuva420p,"
 
 		if i==0:
 			fade_in=""
+			pts="setpts=PTS-STARTPTS+0/TB"
 		else:
-			fade_in="fade=t=in:st=0:d=1:alpha=1,"			
-
-		pts="setpts=PTS-STARTPTS+"+str(time_pts)+"/TB"
+			fade_in="fade=t=in:st=0:d=1:alpha=1,"
+			pts="setpts=PTS-STARTPTS+"+str(time_pts)+"/TB"			
 
 		time_pts+=getLength(input_videos[i])
 

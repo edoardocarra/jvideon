@@ -11,20 +11,8 @@
 			"input": ["test/destra1.mp4"],
 			"transformations": [[
 				{
-					"operation": "SPEEDUP",
-					"parameters": "0.1*PTS"
-				},
-				{
-					"operation": "CROP",
-					"parameters": "1280:360:0:0"
-				},
-				{
 					"operation": "SCALE",
 					"parameters": "640:-1"					
-				},
-				{
-					"operation": "TRIM",
-					"parameters": "00:00:00@00:00:03"
 				}]
 			]
 		},
@@ -34,20 +22,8 @@
 			"input": ["test/sinistra1.mp4"],
 			"transformations": [[
 				{
-					"operation": "SPEEDUP",
-					"parameters": "0.1*PTS"
-				},
-				{
-					"operation": "CROP",
-					"parameters": "1280:360:0:0"
-				},
-				{
 					"operation": "SCALE",
 					"parameters": "640:-1"					
-				},
-				{
-					"operation": "TRIM",
-					"parameters": "00:00:00@00:00:03"
 				}]
 			]
 		},
