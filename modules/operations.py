@@ -23,6 +23,9 @@ def getLength(filename):
 	duration = [x for x in result.stdout.readlines() if "Duration" in x]
 	return time(duration[0])
 
+def convert(input_name, parameters, background, output_name):
+	process("ffmpeg -loop 1 -i "+input_name+" -c:v libx264 -preset ultrafast -t "+parameters+" -pix_fmt yuv420p "+output_name)
+
 def trim(input_name, parameters, background, output_name) :
 	parts=parameters.split("@")
 	process("ffmpeg -y -i "+input_name+" -ss "+parts[0]+" -t "+parts[1]+" -async 1 "+output_name)
@@ -62,7 +65,10 @@ def crossfade(input_videos,output_name) :
 
 		time_pts+=getLength(input_videos[i])
 
-		fade_out="fade=t=out:st="+str(time_pts)+":d=1:alpha=1,"
+		if i==0:
+			fade_out="fade=t=out:st=10:d=1:alpha=1,"
+		else:
+			fade_out="fade=t=out:st="+str(time_pts)+":d=1:alpha=1,"
 
 		command+="["+str(i)+":v]"+vformat+fade_in+fade_out+pts+"[v"+str(i)+"]; "
 

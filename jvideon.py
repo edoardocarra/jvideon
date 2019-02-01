@@ -18,7 +18,8 @@ operation2func = {
     "SCALE": operations.scale,
     "POSITION": operations.position,
     "TRIM": operations.trim,
-    "CROSSFADING": operations.crossfade
+    "CROSSFADING": operations.crossfade,
+    "CONVERT": operations.convert
 }
 
 #====================================
@@ -105,15 +106,16 @@ def valid(videos_json):
 #======SEQUENCE ELEMENTS BUILDER=====
 #====================================
 
-def apply_transformations(path, transformations, background):
+def apply_transformations(input_path, transformations, background, output_path):
 	global completed
 	global to_clear
-	(dirname, filename) = os.path.split(path)
+	(o_dirname, o_filename) = os.path.split(output_path)
+	(dirname, filename) = os.path.split(input_path)
 	input_video_name = filename #on start this is video on disk
 	for transformation in transformations:
 		input_video_path=os.path.join(dirname,input_video_name)
-		output_video_name = transformation["operation"]+"_"+filename
-		output_video_path=os.path.join(dirname,output_video_name)
+		output_video_name = transformation["operation"]+"_"+o_filename
+		output_video_path=os.path.join(o_dirname,output_video_name)
 		to_clear.append(output_video_path)
 		operation2func[transformation["operation"]](input_video_path, transformation["parameters"], background, output_video_path)
 		input_video_name=output_video_name
@@ -130,7 +132,7 @@ def build(video_json):
 	for i in range(0,len(input_videos)):
 		video_path = input_videos[i]
 		video_transformations = transformations[i] 
-		output_video = apply_transformations(video_path,video_transformations,background)
+		output_video = apply_transformations(video_path,video_transformations,background,output_name)
 		os.system("mv "+output_video+" "+output_name)
 		background=output_name
 
