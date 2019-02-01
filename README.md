@@ -1,44 +1,24 @@
 # jvideon
 Simple video generation from JSON 
 
+A video is interpreted as a hierarchical structure of videos. Each video can be transformed according to ffmpeg defined operations, and may overlay a background (to create titles or description). Once all the videos in the leaves of the hierarchy are built, the upper level videos are generated. On the upper level, we may refer to any previously generated video, applying if needed other transformations. Thus each upper level video may refer to lower level videos. The root is the final video. Hierarchy is hand-defined in the json. 
+
 ## JSON ENTITIES
 
-### BACKGROUND 
-The entities the video is composed of. Each BACKGROUND is composed of:
+### SEQUENCE
+The properties which the final video need. 
 
-* A unique id 
-* A name
-* Path to image (user made. This will define background color, writes, images, and all which is static for a given frame).
+* Output path 
+* The videos the sequence is composed of (indices referring to the array of videos)
+* The transition effect 
 
-### SUBSEQUENCE
-A subsequence of the final video. The final video is the composition of many SUBSEQUENCEs. The duration of the video is the sum of the durations of all the SUBSEQUENCEs. If a SUBSEQUENCE does not reference to a video (hence only to a BACKGROUND), its duration is the one specified by the user. Otherwise the duration is the one of the longest video between those referenced by the SUBSEQUENCE. Each SUBSEQUENCE is composed of:
+### VIDEOS
+The array of videos which needs to be generated.
 
-* A unique id 
-* A name
-* BACKGROUND id 
-* duration
-* COMPOSITE id
+Each video is composed by:
 
-### COMPOSITE
-A single COMPOSITE defines the layout for a single VIDEO, like position, or the layout for a compositions of multiple videos. This enhances side-by-side, crossfading, being independent from the BACKGROUND of the SUBSEQUENCE. 
+* Output path 
+* Background path (if needed)
+* An array of input videos paths
+* Transformations to apply on each input video
 
-### VIDEO
-A single video included into the final one. Each VIDEO is composed of: 
-
-* A unique id 
-* A name
-* path to video
-* FILTER list for video
-
-### FILTER
-Transformations applied to the video. Each FILTER is composed of: 
-
-* A unique id 
-* A name
-* Operation id 
-* Operations parameters
-
----
-
-#### TODO: 
-* audio
