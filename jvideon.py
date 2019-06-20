@@ -115,6 +115,8 @@ def apply_transformations(input_path, transformations, background, output_path):
 	for transformation in transformations:
 		input_video_path=os.path.join(dirname,input_video_name)
 		output_video_name = transformation["operation"]+"_"+o_filename
+		if transformation["operation"] == "POSITION": 
+			output_video_name = output_video_name.split(".")[0]+".png"
 		output_video_path=os.path.join(o_dirname,output_video_name)
 		to_clear.append(output_video_path)
 		operation2func[transformation["operation"]](input_video_path, transformation["parameters"], background, output_video_path)
@@ -169,7 +171,7 @@ if "videos" in data:
 	print("BUILDING VIDEOS")
 	t.start()
 
-	# #build single videos
+	#build single videos
 	for video in data["videos"]:
 		build(video)
 
@@ -179,7 +181,7 @@ if "videos" in data:
 	w = threading.Thread(target=sp)
 	print("BUILDING SEQUENCE")
 	w.start()
-	#build video sequence 
+	# build video sequence 
 	if "sequence" in data:
 		build_sequence(data["videos"],data["sequence"])
 	built=True
