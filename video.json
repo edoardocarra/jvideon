@@ -1,14 +1,14 @@
 {
 	"sequence": {
 		"name": "test/output.mp4",
-		"videos": [0,3,3,0,3],
+		"videos": [0,1,2,3,4,5],
 		"transition_effect": "CROSSFADING"
 	},
 	"videos": [
 		{
-			"name": "test/slide1.mp4",
+			"name": "test/title.mp4",
 			"background": "",
-			"input": ["test/slide1.png"],
+			"input": ["test/11.png"],
 			"transformations": [[
 				{
 					"operation": "CONVERT",
@@ -17,45 +17,38 @@
 			]
 		},		
 		{
-			"name": "test/destra1_speedup.mp4",
+			"name": "test/title2.mp4",
 			"background": "",
-			"input": ["test/destra1.mp4"],
+			"input": ["test/22.png"],
 			"transformations": [[
 				{
-					"operation": "SCALE",
-					"parameters": "960:-1"					
+					"operation": "CONVERT",
+					"parameters": "3"					
 				}]
 			]
-		},
+		},	
 		{
-			"name": "test/sinistra1_speedup.mp4",
+			"name": "test/ANCESTOR.mp4",
 			"background": "",
-			"input": ["test/sinistra1.mp4"],
-			"transformations": [[
-				{
-					"operation": "SCALE",
-					"parameters": "960:-1"					
-				}]
-			]
-		},
+			"input": ["test/ANCESTOR.mp4"],
+			"transformations": [[]]
+		},		
 		{
-			"name": "test/destra1esinistra1.mp4", 
-			"background": "test/empty.png",
-			"input": ["test/sinistra1_speedup.mp4",
-					  "test/destra1_speedup.mp4"],
-			"transformations": [
-			[
-				{
-					"operation": "POSITION",
-					"parameters": "0:218.5"
-				}
-			],
-			[
-				{
-					"operation": "POSITION",
-					"parameters": "960:218.5"
-				}
-			]]
-		}
-	]
+			"name": "test/V1.mp4",
+			"background": "",
+			"input": ["test/V1.mp4"],
+			"transformations": [[]]
+		},		
+		{
+			"name": "test/V2.mp4",
+			"background": "",
+			"input": ["test/V2.mp4"],
+			"transformations": [[]]
+		},		
+		{
+			"name": "test/AAV1AV2.mp4",
+			"background": "",
+			"input": ["test/AAV1AV2.mp4"],
+			"transformations": [[]]
+		}]
 }
