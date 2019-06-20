@@ -9,8 +9,8 @@ import ntpath
 import threading
 import time
 
-json_file="video.json"
-work_directory="jvideon"
+json_file=os.path.join(sys.argv[1],"video.json")
+work_directory=sys.argv[1]
 
 operation2func = {
     "SPEEDUP": operations.speedup,
@@ -88,10 +88,10 @@ def valid(videos_json):
 
 	for video_json in videos_json:
 		is_valid = is_valid and video_json["name"] != ""
-		is_valid = is_valid and (video_json["background"] == "" or os.path.isfile(video_json["background"]))
+		is_valid = is_valid and (video_json["background"] == "" or os.path.isfile(os.path.join(work_directory,video_json["background"])))
 		is_valid = is_valid and len(video_json["input"]) == len(video_json["transformations"])
 		for input_path in video_json["input"]:
-			is_valid = is_valid and (os.path.isfile(input_path) or input_path in output_videos)  
+			is_valid = is_valid and (os.path.isfile(os.path.join(work_directory,input_path)) or input_path in output_videos)  
 		for transforms in video_json["transformations"]:
 			for operation in transforms:
 				n_videos=n_videos+1
@@ -124,9 +124,9 @@ def apply_transformations(input_path, transformations, background, output_path):
 	return os.path.join(dirname,input_video_name)
 
 def build(video_json):
-	output_name=video_json["name"]
-	background=video_json["background"]
-	input_videos=video_json["input"]
+	output_name=os.path.join(work_directory,video_json["name"])
+	background=os.path.join(work_directory,video_json["background"])
+	input_videos=[os.path.join(work_directory,v) for v in video_json["input"]]
 	transformations=video_json["transformations"]
 
 	for i in range(0,len(input_videos)):
@@ -141,8 +141,8 @@ def build(video_json):
 #====================================
 
 def build_sequence(videos, sequence_properties):
-	output_path = sequence_properties["name"]
-	sequence_videos = [data["videos"][index]["name"] for index in sequence_properties["videos"]]
+	output_path = os.path.join(work_directory,sequence_properties["name"])
+	sequence_videos = [os.path.join(work_directory,data["videos"][index]["name"]) for index in sequence_properties["videos"]]
 	operation2func[sequence_properties["transition_effect"]](sequence_videos,output_path)
 
 #====================================
